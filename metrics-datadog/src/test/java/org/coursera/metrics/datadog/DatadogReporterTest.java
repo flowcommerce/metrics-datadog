@@ -11,6 +11,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
 import org.coursera.metrics.datadog.DatadogReporter.Expansion;
+import org.coursera.metrics.datadog.model.DatadogCounter;
 import org.coursera.metrics.datadog.model.DatadogGauge;
 import org.coursera.metrics.datadog.transport.Transport;
 import org.junit.Before;
@@ -167,7 +168,7 @@ public class DatadogReporterTest {
 
     final InOrder inOrder = inOrder(transport, request);
     inOrder.verify(transport).prepare();
-    inOrder.verify(request).addGauge(new DatadogGauge("counter", 100L, timestamp, HOST, tags));
+    inOrder.verify(request).addCounter(new DatadogCounter("counter", 100L, timestamp, HOST, tags));
     inOrder.verify(request).send();
 
     verify(transport).prepare();
@@ -188,7 +189,7 @@ public class DatadogReporterTest {
 
     final InOrder inOrder = inOrder(transport, request);
     inOrder.verify(transport).prepare();
-    inOrder.verify(request).addGauge(new DatadogGauge("counter", 100L, timestamp, HOST, tags));
+    inOrder.verify(request).addCounter(new DatadogCounter("counter", 100L, timestamp, HOST, tags));
     inOrder.verify(request).send();
 
     verify(transport).prepare();
@@ -344,8 +345,8 @@ public class DatadogReporterTest {
             this.<Meter>map(),
             this.<Timer>map());
 
-    verify(request).addGauge(new DatadogGauge("testprefix.counter", 100L, timestamp, HOST, tags));
-    verify(request, never()).addGauge(new DatadogGauge("counter", 100L, timestamp, HOST, tags));
+    verify(request).addCounter(new DatadogCounter("testprefix.counter", 100L, timestamp, HOST, tags));
+    verify(request, never()).addCounter(new DatadogCounter("counter", 100L, timestamp, HOST, tags));
   }
 
   @Test
@@ -365,7 +366,7 @@ public class DatadogReporterTest {
             this.<Meter>map(),
             this.<Timer>map());
 
-    verify(request).addGauge(new DatadogGauge("counter", 100L, timestamp, HOST, dynamicTags));
+    verify(request).addCounter(new DatadogCounter("counter", 100L, timestamp, HOST, dynamicTags));
   }
 
   @Test
@@ -402,8 +403,8 @@ public class DatadogReporterTest {
     verify(request).addGauge(
         new DatadogGauge("metric_name_formatter.gauge", 100L, timestamp, HOST, null)
     );
-    verify(request).addGauge(
-        new DatadogGauge("metric_name_formatter.counter", 100L, timestamp, HOST, null)
+    verify(request).addCounter(
+        new DatadogCounter("metric_name_formatter.counter", 100L, timestamp, HOST, null)
     );
   }
 
@@ -428,12 +429,12 @@ public class DatadogReporterTest {
 
     final InOrder inOrder = inOrder(transport, request);
     inOrder.verify(transport).prepare();
-    inOrder.verify(request).addGauge(new DatadogGauge("my.metric.counter",
+    inOrder.verify(request).addCounter(new DatadogCounter("my.metric.counter",
         123L,
         timestamp,
         HOST,
         tags));
-    inOrder.verify(request, never()).addGauge(new DatadogGauge("counter",
+    inOrder.verify(request, never()).addCounter(new DatadogCounter("counter",
         123L,
         timestamp,
         HOST,
