@@ -11,6 +11,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
+import org.coursera.metrics.datadog.model.DatadogCounter;
 import org.coursera.metrics.datadog.model.DatadogGauge;
 import org.coursera.metrics.datadog.transport.Transport;
 import org.slf4j.Logger;
@@ -197,7 +198,13 @@ public class DatadogReporter extends ScheduledReporter {
     // actually a gauge. The Metrics documentation agrees, stating:
     // "A counter is just a gauge for an AtomicLong instance. You can increment or decrement its
     // value. For example, we may want a more efficient way of measuring the pending job in a queue"
-    request.addGauge(new DatadogGauge(metricNameFormatter.format(name), counter.getCount(),
+
+    // The above assumption is somewhat incorrect, as there is a difference how DataDog treats conter
+    // and gauge metrics, as it performs additional processing of the latter. This leads to counter
+    // metrics not being diplayed correctly, often with decimal values, which are not possible
+    // for counters (as they are integer types; eg. there is no such thing as 1.2 requests)
+    // We are deliberately reverting https://github.com/coursera/metrics-datadog/pull/32
+    request.addCounter(new DatadogCounter(metricNameFormatter.format(name), counter.getCount(),
         timestamp, host, tags));
   }
 
