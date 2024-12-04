@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
+    <!--parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
-    </parent>
+    </parent-->
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.coursera</groupId>
+    <groupId>io.flow</groupId>
     <artifactId>metrics-datadog-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>1.1.15-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Datadog Metrics Parent</name>
-    <url>https://github.com/coursera/metrics-datadog</url>
+    <url>https://github.com/flowcommerce/metrics-datadog</url>
 
     <modules>
         <module>metrics-datadog</module>
@@ -27,9 +27,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:coursera/metrics-datadog.git</connection>
-        <developerConnection>scm:git:git@github.com:coursera/metrics-datadog.git</developerConnection>
-        <url>scm:git@github.com:coursera/metrics-datadog.git</url>
+        <connection>scm:git:git@github.com:flowcommerce/metrics-datadog.git</connection>
+        <developerConnection>scm:git:git@github.com:flowcommerce/metrics-datadog.git</developerConnection>
+        <url>scm:git@github.com:flowcommerce/metrics-datadog.git</url>
     </scm>
     <developers>
         <developer>
@@ -104,18 +104,18 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <serverId>dflowio</serverId>
+                    <nexusUrl>https://flow.jfrog.io/flow/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
-            </plugin>
-            <plugin>
+            </plugin-->
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.6</version>
@@ -128,7 +128,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin-->
         </plugins>
     </build>
 
@@ -175,8 +175,8 @@
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.10.19</version>
+                <artifactId>mockito-core</artifactId>
+                <version>2.1.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -187,4 +187,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <distributionManagement>
+        <repository>
+            <id>flowio</id>
+            <url>https://flow.jfrog.io/flow/libs-release-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>flowio</id>
+            <url>https://flow.jfrog.io/flow/libs-snapshot-local</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
