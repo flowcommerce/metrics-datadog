@@ -201,7 +201,7 @@ public class DatadogReporter extends ScheduledReporter {
 
     // The above assumption is somewhat incorrect, as there is a difference how DataDog treats conter
     // and gauge metrics, as it performs additional processing of the latter. This leads to counter
-    // metrics not being diplayed correctly, often with decimal values, which are not possible
+    // metrics not being displayed correctly, often with decimal values, which are not possible
     // for counters (as they are integer types; eg. there is no such thing as 1.2 requests)
     // We are deliberately reverting https://github.com/coursera/metrics-datadog/pull/32
     request.addCounter(new DatadogCounter(metricNameFormatter.format(name), counter.getCount(),
