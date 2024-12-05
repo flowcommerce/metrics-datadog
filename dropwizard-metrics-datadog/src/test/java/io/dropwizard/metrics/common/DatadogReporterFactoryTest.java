@@ -1,4 +1,4 @@
-package io.dropwizard.metrics;
+package io.dropwizard.metrics.common;
 
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
 import org.fest.assertions.api.Assertions;

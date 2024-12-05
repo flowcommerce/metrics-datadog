@@ -50,9 +50,22 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dns-cache-manipulator</artifactId>
-            <version>1.6.4</version>
+            <version>1.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <profiles>
+        <profile>
+            <id>add-java-open-options-for-jdk16+</id>
+            <activation>
+                <jdk>[16,)</jdk>
+            </activation>
+            <properties>
+                <argLine>
+                    --add-opens java.base/java.net=ALL-UNNAMED
+                    --add-opens java.base/sun.net=ALL-UNNAMED
+                </argLine>
+            </properties>
+        </profile>
+    </profiles>
 </project>
