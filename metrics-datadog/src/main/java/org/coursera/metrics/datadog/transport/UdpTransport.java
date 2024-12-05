@@ -39,17 +39,12 @@ public class UdpTransport implements Transport {
       socketAddressCallable = staticAddressResolver(statsdHost, port);
     }
 
-    statsd = new NonBlockingStatsDClient(
-            prefix,
-            Integer.MAX_VALUE,
-            globalTags,
-            new StatsDClientErrorHandler() {
-              public void handle(Exception e) {
-                LOG.error(e.getMessage(), e);
-              }
-            },
-            socketAddressCallable
-    );
+    statsd = new NonBlockingStatsDClientBuilder().prefix(prefix).queueSize(Integer.MAX_VALUE).constantTags(globalTags)
+                    .errorHandler(new StatsDClientErrorHandler() {
+                      public void handle(Exception e) {
+                        LOG.error(e.getMessage(), e);
+                      }
+                    }).addressLookup(socketAddressCallable).build();
   }
 
   public void close() throws IOException {
