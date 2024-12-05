@@ -27,7 +27,6 @@ public class UdpTransport implements Transport {
 
   private static final Logger LOG = LoggerFactory.getLogger(UdpTransport.class);
   private final StatsDClient statsd;
-  private final Map lastSeenCounters = new HashMap<String, Long>();
 
   private UdpTransport(String prefix, String statsdHost, int port, boolean isRetryingLookup, String[] globalTags) {
     final Callable<SocketAddress> socketAddressCallable;
@@ -87,16 +86,14 @@ public class UdpTransport implements Transport {
   }
 
   public Request prepare() throws IOException {
-    return new DogstatsdRequest(statsd, lastSeenCounters);
+    return new DogstatsdRequest(statsd);
   }
 
   public static class DogstatsdRequest implements Transport.Request {
     private final StatsDClient statsdClient;
-    private final Map<String, Long> lastSeenCounters;
 
-    public DogstatsdRequest(StatsDClient statsdClient, Map<String, Long> lastSeenCounters) {
+    public DogstatsdRequest(StatsDClient statsdClient) {
       this.statsdClient = statsdClient;
-      this.lastSeenCounters = lastSeenCounters;
     }
 
     /**
@@ -130,20 +127,7 @@ public class UdpTransport implements Transport {
         }
       }
 
-      String metric = counter.getMetric();
-      String finalMetricsSeenName = metric + ":" + sb.toString();
-      long finalValue = value;
-      if (lastSeenCounters.containsKey(finalMetricsSeenName)) {
-        // If we've seen this counter before then calculate the difference
-        // by subtracting the new value from the old. StatsD expects a relative
-        // counter, not an absolute!
-        finalValue = Math.max(0, value - lastSeenCounters.get(finalMetricsSeenName));
-      }
-      // Store the last value we saw so that the next addCounter call can make
-      // the proper relative value
-      lastSeenCounters.put(finalMetricsSeenName, value);
-
-      statsdClient.count(metric, finalValue, tags);
+      statsdClient.count(counter.getMetric(), value, tags);
     }
 
     /**
