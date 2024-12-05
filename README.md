@@ -115,9 +115,9 @@ First, add the `dropwizard-metrics-datadog` dependency in your POM:
 
 ~~~xml    
     <dependency>
-        <groupId>org.coursera</groupId>
+        <groupId>io.github.flowcommerce</groupId>
         <artifactId>dropwizard-metrics-datadog</artifactId>
-        <version>1.1.13</version>
+        <version>3.0.0</version>
     </dependency>
 ~~~
 
